@@ -1,16 +1,11 @@
 # Base镜像：(java node npm nginx)
 FROM lza11111/nginx-java-node:v1
-RUN apt install -y git 
-RUN npm install yarn -g
+RUN apt install -y git && npm install yarn -g
 
 
 # ———————————————————————— 构建docker镜像内的目录结构 ————————————————————————
 # 根目录
-RUN mkdir /vcs 
-# 源代码
-RUN mkdir /vcs/ui
-# 工作目录（存放可执行文件）
-RUN mkdir /vcs/work_dir
+RUN mkdir /vcs && mkdir /vcs/ui && mkdir /vcs/work_dir
 
 
 
