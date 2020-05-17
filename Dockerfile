@@ -23,7 +23,7 @@ RUN cd /vcs/ui/common-vcs-ui && yarn && yarn build
 
 # 配置 nginx 
 # 拷贝 nginx.conf 到指定目录下
-COPY  /vcs/ui/common-vcs-ui/nginx.conf   /etc/nginx/conf.d/default.conf
+COPY  ./common-vcs-service/nginx.conf   /etc/nginx/conf.d/default.conf
 
 
 # 拷贝前端运行文件到 nginx
