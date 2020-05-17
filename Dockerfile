@@ -29,6 +29,8 @@ COPY  ./common-vcs-service/nginx.conf   /etc/nginx/conf.d/default.conf
 # 拷贝前端运行文件到 nginx
 RUN  cp  -r   /vcs/ui/common-vcs-ui/dist/   /usr/share/nginx/html/
 
+RUN rm -rf /vcs/ui/common-vcs-ui
+
 
 
 EXPOSE 80
