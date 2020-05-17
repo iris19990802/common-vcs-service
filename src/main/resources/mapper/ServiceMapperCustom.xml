@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.isyscore.version.mapper.ServiceMapper" >
+
+    <resultMap id="SABOMap" type="com.isyscore.version.api.bo.SABo">
+        <result column="module_id" property="moduleId"/>
+        <result column="module_name" property="moduleName"/>
+        <result column="module_version" property="moduleVersion"/>
+        <result column="module_progress" property="moduleProgress"/>
+        <result column="service_name" property="serviceName"/>
+        <result column="service_progress" property="serviceProgress"/>
+        <result column="function" property="function"/>
+        <result column="code_branch" property="codeBranch"/>
+        <result column="service_tag" property="serviceTag"/>
+        <result column="manager" property="manager"/>
+
+        <!-- 链接子查询 selectOSListByModuleId -->
+        <collection property="osLst" ofType="com.isyscore.version.entity.Os" column="{module_id=module_id}" select="selectOSListByModuleId">
+        </collection>
+
+
+
+    </resultMap>
+
+    <select id="getServiceByCondition" resultMap="SABOMap" parameterType="Map">
+      select * from service
+      LEFT JOIN module ON module.module_id = service.module_id
+      WHERE service.module_id
+      in
+      (
+        SELECT module.module_id FROM module
+
+        LEFT JOIN os_module ON module.module_id = os_module.module_id
+
+        WHERE 1=1
+        <if test ="paramsMap.osVersion !=null">
+            AND os_module.os_version = '${paramsMap.osVersion}'
+        </if>
+        <if test ="paramsMap.moduleVersion !=null">
+            AND module.module_version = '${paramsMap.moduleVersion}'
+        </if>
+        <if test ="paramsMap.moduleName !=null">
+            AND module.module_name = '${paramsMap.moduleName}'
+        </if>
+
+      )
+  </select>
+
+
+    <select id="getAllService" resultMap="SABOMap" parameterType="Map">
+        select * from service
+        LEFT JOIN module
+        ON
+        service.module_id = module.module_id
+        ORDER BY
+        module.module_id
+    </select>
+
+
+
+    <!-- 子查询（ 用 module 查 os  ）-->
+    <select id="selectOSListByModuleId" resultType="com.isyscore.version.entity.Os">
+        SELECT os.os_version , os.os_name , os.is_history , os.os_date , os.os_progress , os.os_remark FROM os
+        LEFT JOIN os_module ON os.os_version = os_module.os_version
+        WHERE
+        os_module.module_id = ${module_id}
+    </select>
+
+
+
+
+    <select id="getOneServiceByModule" resultType="com.isyscore.version.api.bo.ServiceDetailBO">
+        SELECT * FROM service
+        LEFT JOIN module
+        ON
+        service.module_id = module.module_id
+        WHERE
+        service.service_name = '${serviceName}'
+        AND
+        service.module_id = ${moduleId}
+    </select>
+</mapper>

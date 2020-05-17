@@ -1,0 +1,28 @@
+server:
+  port: 9300
+
+
+spring:
+  profiles:
+    active: local
+  application:
+    name: common-message-service
+
+  datasource:
+    url: jdbc:mysql://47.101.158.184:3306/isc-vcs?useUnicode=true&characterEncoding=UTF-8&autoReconnect=true
+    username: root
+    password: iris1999
+    driver-class-name: com.mysql.jdbc.Driver
+
+
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  configuration:
+    map-underscore-to-camel-case: true
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl  # 打印 mybatis 生成执行的 sql 语句
+
+
+# 分页插件配置
+pagehelper:
+  helperDialect: mysql
+  supportMethodsArguments: true
