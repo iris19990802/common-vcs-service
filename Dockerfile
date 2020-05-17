@@ -8,7 +8,6 @@ RUN apt install -y git && npm install yarn -g
 RUN mkdir /vcs && mkdir /vcs/ui && mkdir /vcs/work_dir
 
 
-
 # 拉取前端代码
 RUN cd /vcs/ui && git clone https://iris19990802:Hdu1020026@github.com/iris19990802/common-vcs-ui
 
@@ -22,9 +21,7 @@ COPY  ./common-vcs-service/nginx.conf   /etc/nginx/conf.d/default.conf
 
 
 # 拷贝前端运行文件到 nginx
-RUN  cp  -r   /vcs/ui/common-vcs-ui/dist/   /usr/share/nginx/html/
-
-RUN rm -rf /vcs/ui/common-vcs-ui
+RUN  cp  -r   /vcs/ui/common-vcs-ui/dist/*.*   /usr/share/nginx/html/
 
 
 
@@ -35,12 +32,8 @@ EXPOSE 80
 
 # (容器外->容器内)
 COPY ./common-vcs-service/entrypoint.sh /vcs/work_dir/entrypoint.sh
+COPY ./common-vcs-service/target/os-version-1.0-SNAPSHOT.jar  /vcs/work_dir
 
+WORKDIR /vcs/work_dir
 
 CMD ["sh","./entrypoint.sh"]
-
-
-
-
-
-
