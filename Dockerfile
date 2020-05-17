@@ -36,7 +36,8 @@ EXPOSE 80
 
 # ———————————————————————— 开启nginx、java服务 ————————————————————————
 
-COPY /vcs/ui/common-vcs-ui/entrypoint.sh /vcs/work_dir/entrypoint.sh
+# (容器外->容器内)
+COPY ./common-vcs-service/entrypoint.sh /vcs/work_dir/entrypoint.sh
 
 
 CMD ["sh","./entrypoint.sh"]
